@@ -19,13 +19,13 @@ function failure($info) {
 
 $payments = new PaymentApi($api_key);
 
-if ($_POST && $_POST['order_id']) {
+if ($_POST && isset($_POST['order_uuid']) && $_POST['order_uuid']) {
 
     if (!$payments->validatePostSignature()) {
         failure('Incorrect signature');
     }
 
-    $order = $_POST['order_id'];
+    $order = $_POST['order_uuid'];
     $settings = $payments->getPaymentSettings($order);
 
     if ($settings && $settings['fields']) {
