@@ -1,6 +1,6 @@
 <?php
 
-require "paymentapi.php";
+require "libs/paymentapi.php";
 require 'config.php';
 
 function failure($info) {

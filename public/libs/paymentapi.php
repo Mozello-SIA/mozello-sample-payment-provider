@@ -19,11 +19,14 @@ class PaymentApi {
         }
     }
 
-    public function sendIPN($order_uuid, $notify_url, $approved = true) {
+    public function sendIPN($order_uuid, $notify_url, $approved = true, $check_pending = false) {
         $data = array(
             'order_uuid' => $order_uuid,
             'status' => $approved ? 'approved' : 'failed'
         );
+        if ($check_pending) {
+            $data['check_pending'] = 1;
+        }
         // generate data string
         $message = '';
         foreach ($data as $key => $value) {
@@ -35,6 +38,7 @@ class PaymentApi {
         $data['signature'] = base64_encode(hash_hmac('sha256', $message, $this->api_key, true));
 
         $r = $this->_curlRequest($notify_url, 'POST', $data);
+        return $r;
     }
 
     public function validatePostSignature() {
